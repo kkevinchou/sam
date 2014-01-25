@@ -1,4 +1,5 @@
 import json
+from object_factory import ObjectFactory
 
 class MapParser(object):
     def open_map(self, map_file):
@@ -21,7 +22,7 @@ class MapParser(object):
             print ' '.join(row)
 
     def parse(self, map_file):
-        map_data = self.open_map('sample.json')
+        map_data = self.open_map(map_file)
         width, height = map_data['width'], map_data['height']
         grid = self.generate_grid(width, height)
 
@@ -31,12 +32,16 @@ class MapParser(object):
                 grid[x][y] = map_data['layers'][0]['data'][map_data_index]
                 map_data_index += 1
 
-
         object_defs = map_data['tilesets'][0]['tileproperties']
 
         for k, v in object_defs.iteritems():
             object_defs[int(k) + 1] = object_defs.pop(k)
 
+        # for x in range(width):
+        #     for y in range(height):
+        #         grid[x][y] = object_defs[grid[x][y]]
+
+        return width, height, grid, object_defs
 
 if __name__ == "__main__":
-    MapParser().parse('sample.json')
+    MapParser().parse('maps/sample.json')
