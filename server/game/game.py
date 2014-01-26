@@ -118,7 +118,7 @@ class Game(BaseGame):
                 print 'NON-LIGHT PLAYER TRIED TO CHANGE MAP'
                 return
 
-            direction = message['direction']:
+            direction = message['direction']
             index = message.get('index', None)
 
             if direction == 'next':
