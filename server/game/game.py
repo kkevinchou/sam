@@ -7,6 +7,8 @@ from map_parser import MapParser
 
 from lib.ecs.component.cudpnetworkplayer import CUDPNetworkPlayer
 
+NUM_WAIT_PLAYERS = 2
+
 class Game(BaseGame):
     maps = [
         os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'sample.json'),
@@ -18,6 +20,8 @@ class Game(BaseGame):
         self.players = {}
         self.map_parser = MapParser()
         self.current_map = 0
+        self.light_player = None
+        self.dark_player = None
 
     def on_message(self, message):
         message['timestamp'] = time.time()
@@ -45,14 +49,26 @@ class Game(BaseGame):
             message = self._safe_get_in_message()
 
     def construct_init_message(self, player_id):
-        width, height, grid, object_defs = self.map_parser.parse(self.maps[self.current_map])
+        width, height, tiles, objects = self.map_parser.parse(self.maps[self.current_map])
+
+        next_obj_id = 1000
+
+        for obj in objects:
+            if obj['kind'] == 'light_player':
+                obj['tag'] = self.light_player
+            elif obj['kind'] == 'dark_player':
+                obj['tag'] = self.dark_player
+            else:
+                obj['tag'] = next_obj_id
+                next_obj_id += 1
+
         message = {
             'action': 'init',
             'player_tag': player_id,
             'width': width,
             'height': height,
-            'data': grid,
-            'definitions': object_defs,
+            'tiles': tiles,
+            'objects': objects,
         }
         return message
 
@@ -72,7 +88,12 @@ class Game(BaseGame):
             )
             self.players[player.id] = player
 
-            if len(self.players) == 1:
+            if self.light_player is None:
+                self.light_player = player.id
+            elif self.dark_player is None:
+                self.dark_player = player.id
+
+            if len(self.players) == NUM_WAIT_PLAYERS:
                 self.send_map_init_message()
         else:
             for player in self.players.values():

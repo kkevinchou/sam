@@ -23,25 +23,29 @@ class MapParser(object):
 
     def parse(self, map_file):
         map_data = self.open_map(map_file)
+
         width, height = map_data['width'], map_data['height']
-        grid = self.generate_grid(width, height)
+        tiles = map_data['layers'][0]['data']
+        objects = map_data['layers'][1]['objects']
 
-        map_data_index = 0
-        for y in range(height):
-            for x in range(width):
-                grid[x][y] = map_data['layers'][0]['data'][map_data_index]
-                map_data_index += 1
+        processed_objects = []
+        for obj in objects:
+            processed_object = {
+                'kind': obj['type'],
+            }
+            processed_object.update(obj['properties'])
+            processed_objects.append(processed_object)
 
-        object_defs = map_data['tilesets'][0]['tileproperties']
+        print processed_objects
 
-        for k, v in object_defs.iteritems():
-            object_defs[int(k) + 1] = object_defs.pop(k)
+        # for k, v in object_defs.iteritems():
+        #     object_defs[int(k) + 1] = object_defs.pop(k)
 
         # for x in range(width):
         #     for y in range(height):
         #         grid[x][y] = object_defs[grid[x][y]]
 
-        return width, height, grid, object_defs
+        return width, height, tiles, processed_objects
 
 if __name__ == "__main__":
     MapParser().parse('maps/sample.json')
