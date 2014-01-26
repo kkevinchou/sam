@@ -2,6 +2,7 @@ local Scene = require 'scene'
 local json = require 'dkjson'
 local Control = require 'control'
 local tween = require 'tween'
+local audio = require 'audio'
 
 local control = Control()
 
@@ -49,6 +50,7 @@ end
 
 function love.load()
 	load()
+    audio:playMusic(true)
     --tween.start(5, s.shadow, {x = 300})--, easing, callback, ...)
     --rcvCallback(demoInit)
     --rcvCallback([[{"direction":[1,0],"action":"move"}]])
