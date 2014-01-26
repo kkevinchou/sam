@@ -20,14 +20,14 @@
                  "name":"switch a",
                  "properties":
                     {
-                     "group":"b",
+                     "group":"a",
                      "is_on":"false"
                     },
                  "type":"switch",
                  "visible":true,
                  "width":54,
-                 "x":532,
-                 "y":86
+                 "x":533,
+                 "y":121
                 }, 
                 {
                  "height":53,
@@ -40,8 +40,8 @@
                  "type":"switch",
                  "visible":true,
                  "width":58,
-                 "x":212,
-                 "y":471
+                 "x":211,
+                 "y":439
                 }, 
                 {
                  "height":51,
