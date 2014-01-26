@@ -602,7 +602,7 @@ function Scene:createObject( def )
 		if (def.kind == 'box') then
 			print 'newBox'
 			def.w, def.h = 35,35
-			quad = love.graphics.newQuad(160, 64, 32, 64, sw,sh)
+			quad = love.graphics.newQuad(32*3, 32*2, 32, 32, sw,sh)
 		end
 
 		if def.kind=='light_player' then
