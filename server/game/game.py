@@ -7,7 +7,7 @@ from map_parser import MapParser
 
 from lib.ecs.component.cudpnetworkplayer import CUDPNetworkPlayer
 
-NUM_WAIT_PLAYERS = 2
+NUM_WAIT_PLAYERS = 1
 
 class Game(BaseGame):
     maps = [
@@ -22,6 +22,8 @@ class Game(BaseGame):
         self.current_map = 0
         self.light_player = None
         self.dark_player = None
+
+        self.last_message_ts_from_player = {}
 
     def on_message(self, message):
         message['timestamp'] = time.time()
@@ -99,6 +101,7 @@ class Game(BaseGame):
                 message['client_address'],
             )
             self.players[player.id] = player
+            self.last_message_ts_from_player[player.id] = 0
 
             if self.light_player is None:
                 self.light_player = player.id
@@ -125,8 +128,15 @@ class Game(BaseGame):
             if index is not None and index > -1 and index < len(self.maps):
                 self.current_map = index
 
-            self.send_map_init_message(sefl.current_map)
+            self.send_map_init_message(self.current_map)
         else:
+            player_id = message['player_id']
+            ts = message['timestamp']
+            if ts < self.last_message_ts_from_player[player_id]:
+                return
+            else:
+                self.last_message_ts_from_player[player_id] = ts
+
             for player in self.players.values():
                 network_component = player.get_component(CUDPNetworkPlayer.component_id)
                 network_component.send_message(message)
