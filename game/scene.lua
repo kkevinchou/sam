@@ -1,5 +1,6 @@
 local Object = require 'middleclass'.Object
 local Scene = Object:subclass'Scene'
+local Animation = require 'Animation'
 require 'system'
 local lp = love.physics
 --[[local ls = {
@@ -17,10 +18,27 @@ local tileImage = love.graphics.newImage'tileset.png'
 
 local dot = love.graphics.newImage'dot.png'
 
+
+local candleImages = {
+	love.graphics.newImage'candle_01.png',
+	love.graphics.newImage'candle_02.png',
+	love.graphics.newImage'candle_03.png',
+	love.graphics.newImage'candle_04.png',
+	love.graphics.newImage'candle_05.png',
+	love.graphics.newImage'candle_06.png',
+	love.graphics.newImage'candle_07.png',
+	love.graphics.newImage'candle_08.png',
+}
+
+local candleGone = {
+	love.graphics.newImage'candle_off.png',
+}
+
 function Scene:initialize()
 	Object.initialize(self)
 	self.units = {}
 	self.bodies = {}
+	self.animations = {}
 	self.physicsRef = {}
 	self.lightSources = {}
 	self.world = lp.newWorld()
@@ -76,6 +94,7 @@ end
 function Scene:reset()
 	self.units = {}
 	self.bodies = {}
+	self.animations = {}
 	self.physicsRef = {}
 	self.lightSources = {}
 	self.world = lp.newWorld()
@@ -103,12 +122,14 @@ function Scene:drawScarf()
 end
 
 function Scene:update(dt)
+	for i,v in ipairs(self.animations) do
+		v:update(dt)
+	end
 	for i,v in ipairs(self.units) do
 		if not self.bodies[v.tag] then
 			local kind = 'static'
 			if (v.kind ~= 'wall') then print (v.kind) end
 			if v.kind == 'light_player' or v.kind == 'dark_player' or v.kind == 'box' then
-				print (v.kind, 'is dynamic')
 				kind = 'dynamic'
 			end
 			local b = lp.newBody(self.world,v.x,v.y,kind)
@@ -205,6 +226,9 @@ function Scene:screenCordToShader( x,y )
 end
 
 function Scene:draw()
+	for i,v in ipairs(self.animations) do
+		v:draw()
+	end
 	love.graphics.setColor(255,255,255,100)
 	if self.tileset then
 		love.graphics.draw(self.tileset)
@@ -449,6 +473,14 @@ function Scene:createObject( def )
 		local range = def.range or 2.8
 		range = range * 32
 		table.insert(self.lightSources, {x=x,y=y,range=range,is_on = def.is_on,group = def.group})
+		if def.kind == 'light' then
+			local anim = Animation(candleImages, 0.2, x,y)
+			table.insert(self.animations, anim)
+			if not def.is_on then
+				anim.images = candleGone
+			end
+			self.lightSources[#self.lightSources].animation = anim
+		end
 	else
 		local sw,sh = tileImage:getWidth(), tileImage:getHeight()
 		local tileId, quad
@@ -457,7 +489,6 @@ function Scene:createObject( def )
 			local tx,ty = getTileTopLeft(tileId)
 			quad = love.graphics.newQuad(tx * 32,ty *32, 32, 32, sw,sh)
 		end
-		print (def.kind)
 		if (def.kind == 'box') then
 			print 'newBox'
 			def.w, def.h = 35,35
@@ -513,8 +544,11 @@ function Scene:updateState(data)
 			if lightsource.group == data.group then
 				lightsource.is_on = not lightsource.is_on
 				if lightsource.is_on then
+					lightsource.animation.images = candleImages
 					self.bloom = .5
 					tween.start(.5, self, {bloom = 0})
+				else
+					lightsource.animation.images = candleGone
 				end
 			end
 		end
