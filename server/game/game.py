@@ -67,7 +67,7 @@ class Game(BaseGame):
                 processed_object['tag'] = next_obj_id
                 next_obj_id += 1
 
-            for k, v in processed_object:
+            for k, v in processed_object.iteritems():
                 if v == 'false':
                     processed_objects[k] = False
                 elif v == 'true':
