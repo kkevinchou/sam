@@ -1,5 +1,6 @@
 local Object = require 'middleclass'.Object
 local Scene = Object:subclass'Scene'
+require 'system'
 local lp = love.physics
 --[[local ls = {
 		range = 32*1.5*4,
@@ -138,25 +139,30 @@ function Scene:update(dt)
 		v.hitByLight = nil
 	end
 
-	local direction
+	local vx,vy = 0,0
 
 	if love.keyboard.isDown'a' then
-		direction={-1,0}
-	elseif love.keyboard.isDown'd' then
-		direction={1,0}
-	elseif love.keyboard.isDown'w' then
-		direction={0,-1}
-	elseif love.keyboard.isDown's' then
-		direction={0,1}
-	else
-		direction = {0,0}
+		vx = -1
 	end
+	if love.keyboard.isDown'd' then
+		vx = 1
+	end
+	if love.keyboard.isDown'w' then
+		vy = -1
+	end
+	if love.keyboard.isDown's' then
+		vy = 1
+	end
+
+	local speed = 100
+
+	vx,vy = normalize(vx,vy)
 	if self.player then
 		for _,unit in ipairs(self.units) do
 			local body = self.bodies[unit.tag]
 			body:setAngle(0)
 			if unit == self.player then
-				body:setLinearVelocity(direction[1]*100,direction[2]*100)
+				body:setLinearVelocity(vx * speed,vy * speed)
 
 				for _,lightsource in ipairs(self.lightSources) do
 					if lightsource.is_on and (unit.x - lightsource.x)^2 + (unit.y - lightsource.y) ^ 2 < 64*64 then
