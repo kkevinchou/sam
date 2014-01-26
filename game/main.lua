@@ -40,7 +40,7 @@ end
 
 function load()
     --do anything else you need to do here
-    local ip, port = '10.1.7.109', 1234
+    local ip, port = '127.0.0.1', 1234
     lube.client:Init('udp') --initialize
     lube.client:setHandshake('{"action":"player_connect"}') --this is a unique string that will be sent when connecting and disconnecting
     lube.client:setCallback(rcvCallback) --set rcvCallback as the callback for received messages
@@ -82,7 +82,9 @@ function love.keypressed( k )
     end
 
     if k == 'b' then
-        s.bloom = .5
-                    tween.start(.5, s, {bloom = 0})
-                end
+        s:clear(true)
+    end
+    if k == 'v' then
+        s:clear(false)
+    end
 end
