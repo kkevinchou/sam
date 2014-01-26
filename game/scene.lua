@@ -13,7 +13,7 @@ local tween = require 'tween'
 
 local img = love.graphics.newImage'testbg.jpg'
 
-local tileImage = love.graphics.newImage'tileset.jpeg'
+local tileImage = love.graphics.newImage'tileset.png'
 
 local dot = love.graphics.newImage'dot.png'
 
@@ -66,6 +66,11 @@ function Scene:initialize()
 	love.graphics.setBackgroundColor(0,0,0)
 
 	self.scarf = {}
+	self.blurInt = 0
+	local function blurT()
+		tween.start(.5,self,{blurInt=math.random()*5},nil,blurT)
+	end
+	blurT()
 end
 
 function Scene:reset()
@@ -145,9 +150,11 @@ function Scene:update(dt)
 
 	if love.keyboard.isDown'a' then
 		vx = -1
+		self.face = 'left'
 	end
 	if love.keyboard.isDown'd' then
 		vx = 1
+		self.face = 'right'
 	end
 	if love.keyboard.isDown'w' then
 		vy = -1
@@ -203,15 +210,6 @@ function Scene:draw()
 		love.graphics.draw(self.tileset)
 	end
 	love.graphics.setColor(255,255,255,255)
-	for i,v in ipairs(self.units) do
-		love.graphics.rectangle('line', v.x - v.w/2,
-				v.y - v.h / 2,
-				v.w,
-				v.h)
-		if v.quad then
-			love.graphics.draw(tileImage, v.quad, v.x, v.y, 0, 1, 1, 16, 16)
-		end
-	end
 	s:drawLight()
 	s:drawShadow()
 	for i,v in ipairs(self.units) do
@@ -228,6 +226,27 @@ function Scene:draw()
 		love.graphics.setColor(255,255,255,self.bloom*255)
 		love.graphics.draw(self:getCurrentCanvas())
 		self:exchangeCanvas()
+	end
+	for i,v in ipairs(self.units) do
+		love.graphics.rectangle('line', v.x - v.w/2,
+				v.y - v.h / 2,
+				v.w,
+				v.h)
+		if v.kind == 'light_player' then
+			love.graphics.setColor(255,255,255,127)
+			love.graphics.setShader(self.blurShader)
+			self.blurShader:send('intensity', self.blurInt)
+			local sx = 1
+			if self.face == 'left' then
+				sx = -1
+			end
+			love.graphics.draw(tileImage, v.quad, v.x, v.y+self.blurInt, 0, sx, 1, 16, 48)
+			love.graphics.setShader()
+			love.graphics.setColor(255,255,255)
+			self.blurShader:send('intensity', 3)
+		elseif v.quad then
+			love.graphics.draw(tileImage, v.quad, v.x, v.y, 0, 1, 1, 16, 16)
+		end
 	end
 end
 
@@ -330,7 +349,7 @@ function Scene:updateState( state )
 end
 
 local vfieldpic = love.graphics.newImage'vfield.png'
-
+local ecli = love.graphics.newImage'ecli.png'
 function Scene:updateShadow( dt )
 	if not self.shadow then return end
 	self.shadowTime = self.shadowTime + dt
@@ -358,7 +377,7 @@ function Scene:updateShadow( dt )
 
 	local x,y = self.light.x, self.light.y
 	love.graphics.setColor(255,241,195,255)
-	love.graphics.circle('fill',x,y, 16)
+	love.graphics.draw(ecli,x,y,0,1,1,16,8)
 
 	love.graphics.setCanvas()
 	self:exchangeCanvas()
@@ -376,8 +395,8 @@ function Scene:updateShadow( dt )
 end
 
 local function getTileTopLeft(tileId)
-	if tileId == 0 then return 8,8 end
-	local x,y = tileId % 8, math.floor(tileId/8)
+	if tileId == 0 then return 4,4 end
+	local x,y = tileId % 6, math.floor(tileId/6)
 	if x == 0 then
 		x = 8
 		y = y - 1
@@ -430,7 +449,13 @@ function Scene:createObject( def )
 		end
 		print (def.kind)
 		if (def.kind == 'box') then
+			print 'newBox'
 			def.w, def.h = 35,35
+		end
+
+		if def.kind=='light_player' then
+			print 'newQuad'
+			quad = love.graphics.newQuad(192, 0, 32, 64, sw,sh)
 		end
 		local object = {
 			tag = def.tag or 1,
@@ -442,9 +467,6 @@ function Scene:createObject( def )
 			h = def.h or 25,
 			group = def.group
 		}
-		if (def.kind=='light_player') then
-			--object.quad = love.graphics.newQuad(0, 0, 32, 32, sw,sh)
-		end
 		table.insert(self.units,object)
 	end
 end
