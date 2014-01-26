@@ -1,20 +1,10 @@
 local Object = require 'middleclass'.Object
 local Scene = Object:subclass'Scene'
 local Animation = require 'Animation'
+local audio = require 'audio'
 require 'system'
 local lp = love.physics
 local cobweb = require 'cobweb'
-
-local function angelOn()
-end
-local function angelOff()
-end
-local function devilOn()
-end
-local function devilOff()
-end
-local function switchToggle()
-end
 
 --[[local ls = {
 		range = 32*1.5*4,
@@ -250,7 +240,13 @@ function Scene:attemptInteract()
 		if self.interacting.kind == 'switch' then
 			local anim = self.interacting.animation
 			anim.images, anim.images2 = anim.images2, anim.images
-			switchToggle()
+
+			if (math.random() > 0.5) then
+				audio:playSwitch(true)
+			else
+				audio:playSwitch(false)
+			end
+
 			self:sendCommand({action='interact', group = self.interacting.group})
 		end
 	end
@@ -429,20 +425,20 @@ function Scene:drawLight()
 		    	if unit.hitByLight then
 
 					unit.animation.images = devilImage
-					devilOff()
+    				audio:playDevil(false)
 				else
 					unit.animation.images = devilImage2
-					devilOn()
+    				audio:playDevil(true)
 				end
 		    end
 		    if unit.kind == 'angel' then
 		    	if unit.hitByLight then
 
 					unit.animation.images = angelImage2
-					angelOn()
+    				audio:playAngel(true)
 				else
 					unit.animation.images = angelImage
-					angelOff()
+    				audio:playAngel(false)
 				end
 		    end
 
