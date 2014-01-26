@@ -26,6 +26,7 @@ class SocketHandler(SocketServer.BaseRequestHandler):
     """
 
     def handle(self):
+        # print 'handle {}'.format(int(time.time()))
         clients = self.server.clients
         next_player_id = self.server.next_player_id
         game = self.server.game
@@ -47,7 +48,7 @@ class SocketHandler(SocketServer.BaseRequestHandler):
         game.on_message(message)
 
 if __name__ == '__main__':
-    HOST, PORT = "localhost", 8887
+    HOST, PORT = "127.0.0.1", 1234
     server = SamServer((HOST, PORT), SocketHandler)
     server.serve_forever()
 

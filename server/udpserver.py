@@ -1,4 +1,5 @@
 import SocketServer
+import time
 
 class MyUDPHandler(SocketServer.BaseRequestHandler):
     """
@@ -9,13 +10,14 @@ class MyUDPHandler(SocketServer.BaseRequestHandler):
     """
 
     def handle(self):
+        print 'handle {}'.format(time.time())
         data = self.request[0].strip()
         socket = self.request[1]
-        print "{} wrote:".format(self.client_address[0])
-        print data
-        socket.sendto(data.upper(), self.client_address)
+        # print "{} wrote:".format(self.client_address[0])
+        # print data
+        # socket.sendto(data, self.client_address)
 
 if __name__ == "__main__":
-    HOST, PORT = "10.1.7.109", 1234
+    HOST, PORT = "127.0.0.1", 1234
     server = SocketServer.UDPServer((HOST, PORT), MyUDPHandler)
     server.serve_forever()
