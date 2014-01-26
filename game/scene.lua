@@ -3,6 +3,19 @@ local Scene = Object:subclass'Scene'
 local Animation = require 'Animation'
 require 'system'
 local lp = love.physics
+local cobweb = require 'cobweb'
+
+local function angelOn()
+end
+local function angelOff()
+end
+local function devilOn()
+end
+local function devilOff()
+end
+local function switchToggle()
+end
+
 --[[local ls = {
 		range = 32*1.5*4,
 		x = 400,
@@ -107,6 +120,7 @@ function Scene:initialize()
 		tween.start(.5,self,{blurInt=math.random()*5},nil,blurT)
 	end
 	blurT()
+	cobweb:load(800,600,50)
 end
 
 function Scene:reset()
@@ -236,6 +250,7 @@ function Scene:attemptInteract()
 		if self.interacting.kind == 'switch' then
 			local anim = self.interacting.animation
 			anim.images, anim.images2 = anim.images2, anim.images
+			switchToggle()
 			self:sendCommand({action='interact', group = self.interacting.group})
 		end
 	end
@@ -261,6 +276,7 @@ function Scene:draw()
 
 		end
 	end
+	cobweb:draw(0,0)
 	if self.bloom and self.bloom > 0 then
 		love.graphics.setCanvas(self:getCurrentCanvas())
 		love.graphics.clear()
@@ -351,7 +367,10 @@ function Scene:drawLight()
 				    --[[if data.kind == 'light_player' then
 				  		data.hitByLight = true
 				  	end]]
-				  	if data.kind == 'wall' or data.kind == 'box' or data.kind == 'dark_player' or data.kind == 'light_player' then
+				  	if data.kind == 'wall' or data.kind == 'box' or 
+				  		data.kind == 'dark_player' or data.kind == 'light_player'
+				  		or data.kind == 'angel' or data.kind == 'devil'
+				  		 then
 				    table.insert(hitList, hit)
 				    end
 
@@ -410,16 +429,20 @@ function Scene:drawLight()
 		    	if unit.hitByLight then
 
 					unit.animation.images = devilImage
+					devilOff()
 				else
 					unit.animation.images = devilImage2
+					devilOn()
 				end
 		    end
 		    if unit.kind == 'angel' then
 		    	if unit.hitByLight then
 
 					unit.animation.images = angelImage2
+					angelOn()
 				else
 					unit.animation.images = angelImage
+					angelOff()
 				end
 		    end
 
@@ -522,6 +545,7 @@ end
 local id = 10000
 
 local obs = {[7]=true}
+local web = {[7]=true}
 
 function Scene:createTile(data,width,height)
 	local sw,sh = tileImage:getWidth(), tileImage:getHeight()
@@ -532,6 +556,9 @@ function Scene:createTile(data,width,height)
 			local tx,ty = getTileTopLeft(tileId)
 			local quad = love.graphics.newQuad(tx * 32,ty *32, 32, 32, sw,sh)
 			local id = self.tileset:add(quad,(i-1)*32, (j-1)*32,0, 1, 1, 16, 16)
+			if web[tileId] then
+				cobweb:spawn((i-1)*32, (j-1)*32)
+			end
 			if obs[tileId] then
 				table.insert(self.units, {
 					w = 32,
@@ -623,6 +650,7 @@ end
 
 function Scene:updateState(data)
 	if data.action == 'init' then
+		cobweb:clear()
 		self:reset()
 		self.playerTag = data['player_tag']
 		self.width = data.width
