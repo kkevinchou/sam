@@ -1,5 +1,4 @@
 import json
-from object_factory import ObjectFactory
 
 class MapParser(object):
     def open_map(self, map_file):

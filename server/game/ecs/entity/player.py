@@ -1,4 +1,3 @@
-from lib.player import Player as BasePlayer
 from lib.ecs.entity.entity import Entity
 from lib.ecs.component.cudpnetworkplayer import CUDPNetworkPlayer
 
