@@ -25,7 +25,7 @@ function cobweb:spawn(x,y)
 	--x,y = x+dx, y + dy
 	scale = math.random() + 1
 	
-
+	local r = math.random()*7
 	love.graphics.setShader(self.blurShader)
 	love.graphics.setCanvas(self.canvas)
 	self.blurShader:send('intensity', (scale - 1) * 3)

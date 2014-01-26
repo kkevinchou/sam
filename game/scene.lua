@@ -511,10 +511,10 @@ function Scene:updateShadow( dt )
 end
 
 local function getTileTopLeft(tileId)
-	if tileId == 0 then return 4,4 end
-	local x,y = tileId % 6, math.floor(tileId/6)
+	if tileId == 0 then return nil end
+	local x,y = tileId % 8, math.floor(tileId/8)
 	if x == 0 then
-		x = 8
+		x = 6
 		y = y - 1
 	end
 	return x - 1,y
@@ -551,8 +551,8 @@ end
 
 local id = 10000
 
-local obs = {[7]=true}
-local web = {[7]=true}
+local obs = {[9]=true,[25]=true}
+local web = {[9]=true,[25]=true}
 
 function Scene:createTile(data,width,height)
 	local sw,sh = tileImage:getWidth(), tileImage:getHeight()
@@ -561,22 +561,24 @@ function Scene:createTile(data,width,height)
 		for j=1,height do
 			local tileId = data[i+width*(j-1)]
 			local tx,ty = getTileTopLeft(tileId)
-			local quad = love.graphics.newQuad(tx * 32,ty *32, 32, 32, sw,sh)
-			local id = self.tileset:add(quad,(i-1)*32, (j-1)*32,0, 1, 1, 16, 16)
-			if web[tileId] then
-				cobweb:spawn((i-1)*32, (j-1)*32)
-			end
-			if obs[tileId] then
-				table.insert(self.units, {
-					w = 32,
-					h = 32,
-					x = (i-1)*32,
-					y = (j-1)*32,
-					tag = id,
-					isObstacle = true,
-					kind = 'wall'
-				})
-				id = id + 1
+			if tx then
+				local quad = love.graphics.newQuad(tx * 32,ty *32, 32, 32, sw,sh)
+				local id = self.tileset:add(quad,(i-1)*32, (j-1)*32,0, 1, 1, 16, 16)
+				if web[tileId] then
+					cobweb:spawn((i-1)*32, (j-1)*32)
+				end
+				if obs[tileId] then
+					table.insert(self.units, {
+						w = 32,
+						h = 32,
+						x = (i-1)*32,
+						y = (j-1)*32,
+						tag = id,
+						isObstacle = true,
+						kind = 'wall'
+					})
+					id = id + 1
+				end
 			end
 		end
 	end
@@ -603,7 +605,9 @@ function Scene:createObject( def )
 		if def.tileId then
 			tileId = def.tileId
 			local tx,ty = getTileTopLeft(tileId)
-			quad = love.graphics.newQuad(tx * 32,ty *32, 32, 32, sw,sh)
+			if tx then
+				quad = love.graphics.newQuad(tx * 32,ty *32, 32, 32, sw,sh)
+			end
 		end
 		if (def.kind == 'box') then
 			print 'newBox'
