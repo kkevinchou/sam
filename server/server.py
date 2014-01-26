@@ -48,7 +48,7 @@ class SocketHandler(SocketServer.BaseRequestHandler):
         game.on_message(message)
 
 if __name__ == '__main__':
-    HOST, PORT = "127.0.0.1", 1234
+    HOST, PORT = "0.0.0.0", 1234
     server = SamServer((HOST, PORT), SocketHandler)
     server.serve_forever()
 
