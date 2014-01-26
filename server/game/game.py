@@ -12,6 +12,8 @@ NUM_WAIT_PLAYERS = 2
 class Game(BaseGame):
     maps = [
         os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level1c.json'),
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level2c.json'),
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level3c.json'),
     ]
 
     def __init__(self, fps):
