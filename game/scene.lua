@@ -290,11 +290,11 @@ function Scene:drawLight()
 				    hit.xn, hit.yn = xn, yn
 				    hit.fraction = fraction
 				    hit.data = data
-				    if data.kind == 'light_player' then
+				    --[[if data.kind == 'light_player' then
 				  		data.hitByLight = true
-				  	end
-				  	if data.kind == 'wall' or data.kind == 'box' or data.kind == 'dark_player' then
-				    	table.insert(hitList, hit)
+				  	end]]
+				  	if data.kind == 'wall' or data.kind == 'box' or data.kind == 'dark_player' or data.kind == 'light_player' then
+				    table.insert(hitList, hit)
 				    end
 
 				    return 1 -- Continues with ray cast through all shapes.
@@ -306,8 +306,18 @@ function Scene:drawLight()
 				local kx, ky = unpack(triPoints[i % numberOfCasts + 1])
 				if firstHit then
 				    firstHit.data.hitByLight = true
-						love.graphics.polygon('fill',px,py,px+dx * firstHit.fraction,py+dy * firstHit.fraction,
+				    if firstHit.data.kind == 'light_player' then
+				    	if hitList[2] then
+				    		firstHit = hitList[2]
+				    		love.graphics.polygon('fill',px,py,px+dx * firstHit.fraction,py+dy * firstHit.fraction,
 							px+kx * firstHit.fraction,py+ky * firstHit.fraction)
+				    	else
+				    		love.graphics.polygon('fill',px,py,px+dx,py+dy,px+kx,py+ky)
+				    	end
+						else
+							love.graphics.polygon('fill',px,py,px+dx * firstHit.fraction,py+dy * firstHit.fraction,
+							px+kx * firstHit.fraction,py+ky * firstHit.fraction)
+					end
 				else
 					love.graphics.polygon('fill',px,py,px+dx,py+dy,px+kx,py+ky)
 				end
