@@ -161,16 +161,6 @@ function Scene:update(dt)
 			self.bodies[v.tag] = b
 			b:setInertia(1000000)
 			f:setUserData(v)
-
-			if #self.scarf == 0 and self.light then
-				assert(self.light)
-				for i = 1, 8 do
-					local x,y = self.light.x, self.light.y
-					local shape = lp.newRectangleShape(20,10)
-					local b = lp.newBody(self.world, x + 20 * i)
-					local fixture = lp.newFixture(b,shape)
-				end
-			end
 		end
 
 		self.bodies[v.tag]:setPosition(v.x,v.y)
@@ -551,7 +541,7 @@ end
 
 local id = 10000
 
-local obs = {[9]=true,[25]=true}
+local obs = {[9]=true,[17]=true,[25]=true}
 local web = {[9]=true,[25]=true}
 
 function Scene:createTile(data,width,height)
@@ -563,7 +553,7 @@ function Scene:createTile(data,width,height)
 			local tx,ty = getTileTopLeft(tileId)
 			if tx then
 				local quad = love.graphics.newQuad(tx * 32,ty *32, 32, 32, sw,sh)
-				local id = self.tileset:add(quad,(i-1)*32, (j-1)*32,0, 1, 1, 16, 16)
+				self.tileset:add(quad,(i-1)*32, (j-1)*32,0, 1, 1, 16, 16)
 				if web[tileId] then
 					cobweb:spawn((i-1)*32, (j-1)*32)
 				end
