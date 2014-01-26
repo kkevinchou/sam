@@ -80,7 +80,9 @@ function love.keypressed( k )
     end
 
     if k == 'b' then
-        s.bloom = .5
-                    tween.start(.5, s, {bloom = 0})
-                end
+        s:clear(true)
+    end
+    if k == 'v' then
+        s:clear(false)
+    end
 end

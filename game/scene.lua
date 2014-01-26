@@ -18,6 +18,24 @@ local tileImage = love.graphics.newImage'tileset.png'
 
 local dot = love.graphics.newImage'dot.png'
 
+local switchImage = {
+	love.graphics.newImage'lever_left.png'
+}
+local switchImage2 = {
+	love.graphics.newImage'lever_right.png'
+}
+local angelImage = {
+	love.graphics.newImage'angel_idle.png'
+}
+local angelImage2 = {
+	love.graphics.newImage'angel_activated.png'
+}
+local devilImage = {
+	love.graphics.newImage'devil_idle.png'
+}
+local devilImage2 = {
+	love.graphics.newImage'devil_activated.png'
+}
 
 local candleImages = {
 	love.graphics.newImage'candle_01.png',
@@ -216,6 +234,8 @@ end
 function Scene:attemptInteract()
 	if (self.interacting) then
 		if self.interacting.kind == 'switch' then
+			local anim = self.interacting.animation
+			anim.images, anim.images2 = anim.images2, anim.images
 			self:sendCommand({action='interact', group = self.interacting.group})
 		end
 	end
@@ -252,11 +272,17 @@ function Scene:draw()
 		self:exchangeCanvas()
 	end
 	for i,v in ipairs(self.units) do
-		love.graphics.rectangle('line', v.x - v.w/2,
+		--[[love.graphics.rectangle('line', v.x - v.w/2,
 				v.y - v.h / 2,
 				v.w,
-				v.h)
+				v.h)]]
 		if v.kind == 'light_player' then
+			
+		elseif v.quad then
+			love.graphics.draw(tileImage, v.quad, v.x, v.y, 0, 1, 1, 16, 16)
+		end
+	end
+	if self.light then
 			love.graphics.setColor(255,255,255,127)
 			love.graphics.setShader(self.blurShader)
 			self.blurShader:send('intensity', self.blurInt)
@@ -264,13 +290,20 @@ function Scene:draw()
 			if self.face == 'left' then
 				sx = -1
 			end
-			love.graphics.draw(tileImage, v.quad, v.x, v.y+self.blurInt, 0, sx, 1, 16, 48)
+			love.graphics.draw(tileImage, self.light.quad, self.light.x, self.light.y+self.blurInt, 0, sx, 1, 16, 48)
 			love.graphics.setShader()
 			love.graphics.setColor(255,255,255)
 			self.blurShader:send('intensity', 3)
-		elseif v.quad then
-			love.graphics.draw(tileImage, v.quad, v.x, v.y, 0, 1, 1, 16, 16)
 		end
+	if self.clearing then
+		love.graphics.setColor(255,255,255,self.clearing * 255)
+		love.graphics.setShader(self.blurShader)
+		self.blurShader:send('intensity',(1-self.clearing) * 10)
+		love.graphics.draw(self.canvasvic,400,300,0,2-self.clearing,nil,400,300)
+		love.graphics.setShader()
+		love.graphics.setColor(255,255,255)
+	end
+	if self.showing then
 	end
 end
 
@@ -286,6 +319,7 @@ end
 local numberOfCasts = 200
 
 function Scene:drawLight()
+			self.blurShader:send('intensity', 3)
 	for _,source in ipairs(self.lightSources) do
 		if source.is_on then
 			love.graphics.setCanvas(self:getCurrentCanvas())
@@ -371,6 +405,24 @@ function Scene:drawLight()
 					self:sendCommand({action='move',x=x,y=y,tag = unit.tag})
 				end
 			end
+
+		    if unit.kind == 'devil' then
+		    	if unit.hitByLight then
+
+					unit.animation.images = devilImage
+				else
+					unit.animation.images = devilImage2
+				end
+		    end
+		    if unit.kind == 'angel' then
+		    	if unit.hitByLight then
+
+					unit.animation.images = angelImage2
+				else
+					unit.animation.images = angelImage
+				end
+		    end
+
 		end
 	end
 end
@@ -438,6 +490,35 @@ local function getTileTopLeft(tileId)
 	return x - 1,y
 end
 
+local lvlClear = love.graphics.newImage'lvlclear.png'
+
+function Scene:clear(isAngel)
+	self.clearing = 0
+	self.canvasvic = love.graphics.newCanvas(800,600)
+	local bgc = {love.graphics.getBackgroundColor()}
+	love.graphics.setCanvas(self.canvasvic)
+	if isAngel then
+		love.graphics.setBackgroundColor{255,255,255}
+		love.graphics.setColor{0,0,0}
+	else
+		love.graphics.setBackgroundColor{0,0,0}
+		love.graphics.setColor{255,255,255}
+	end
+	love.graphics.clear()
+	love.graphics.draw(lvlClear, 400, 300, 0, 1, 1, lvlClear:getWidth()/2, lvlClear:getHeight()/2)
+	love.graphics.setCanvas()
+	self.showing = 1
+	tween.start(.5, self, {clearing = 1}, outExpo, function()
+		tween.start(1, self, {},nil,function()
+			self:sendCommand({action='change_map',direction='next'})
+		tween.start(1, self,{clearing = 0})
+			self.clearing = nil
+		end)
+	end)
+	love.graphics.setColor{255,255,255}
+	love.graphics.setBackgroundColor(bgc)
+end
+
 local id = 10000
 
 local obs = {[7]=true}
@@ -467,6 +548,7 @@ function Scene:createTile(data,width,height)
 	end
 end
 
+
 function Scene:createObject( def )
 	if def.kind == 'light' or def.kind == 'window_light' then
 		local x,y = def.x - 16, def.y - 16
@@ -492,12 +574,14 @@ function Scene:createObject( def )
 		if (def.kind == 'box') then
 			print 'newBox'
 			def.w, def.h = 35,35
+			quad = love.graphics.newQuad(160, 64, 32, 64, sw,sh)
 		end
 
 		if def.kind=='light_player' then
 			print 'newQuad'
 			quad = love.graphics.newQuad(192, 0, 32, 64, sw,sh)
 		end
+
 		local object = {
 			tag = def.tag or 1,
 			quad = quad,
@@ -508,6 +592,31 @@ function Scene:createObject( def )
 			h = def.h or 25,
 			group = def.group
 		}
+
+		if def.kind=='switch' then
+			local anim = Animation(switchImage, 10, def.x-16,def.y-16)
+			anim.images2 = switchImage2
+			table.insert(self.animations,anim)
+			object.animation = anim
+		end
+
+
+		if def.kind == 'angel' then
+			local anim = Animation(angelImage, 10, def.x-16,def.y-16)
+			anim.h = 32
+			anim.images2 = switchImage2
+			table.insert(self.animations,anim)
+			object.animation = anim
+		end
+
+		if def.kind == 'devil' then
+			local anim = Animation(devilImage, 10, def.x-16,def.y-16)
+			anim.h = 32
+			anim.images2 = switchImage2
+			table.insert(self.animations,anim)
+			object.animation = anim
+		end
+
 		table.insert(self.units,object)
 	end
 end

@@ -17,9 +17,10 @@ end
 function Animation:draw(x,y)
 	x = x or self.x
 	y = y or self.y
+	love.graphics.setColor(255,255,255)
 	local currentImage = self.images[
 		math.floor(self.timeElapsed/self.interval)%(#self.images) + 1]
-	local w,h = currentImage:getWidth(), currentImage:getHeight()
+	local w,h = self.w or currentImage:getWidth(), self.h or currentImage:getHeight()
 	love.graphics.draw(currentImage, x, y, 0, 1, 1, w/2, h/2)
 end
 
