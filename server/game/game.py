@@ -8,18 +8,10 @@ from map_parser import MapParser
 from lib.ecs.component.cudpnetworkplayer import CUDPNetworkPlayer
 
 NUM_WAIT_PLAYERS = 2
+MAPS_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps')
+MAP_FILES = os.listdir(MAPS_PATH)
 
 class Game(BaseGame):
-    maps = [
-        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level1c.json'),
-        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level2c.json'),
-        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level3c.json'),
-        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level4c.json'),
-        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level5c.json'),
-        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level6c.json'),
-        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level7c.json'),
-    ]
-
     def __init__(self, fps):
         super(Game, self).__init__(fps)
         self.in_messages = Queue()
@@ -28,6 +20,8 @@ class Game(BaseGame):
         self.current_map = 0
         self.light_player = None
         self.dark_player = None
+
+        self.maps = [os.path.join(MAPS_PATH, _map) for _map in MAP_FILES]
 
         self.last_message_ts_from_player = {}
 
