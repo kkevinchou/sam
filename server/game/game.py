@@ -78,7 +78,6 @@ class Game(BaseGame):
 
         message = {
             'action': 'init',
-            'player_tag': player_id,
             'width': width,
             'height': height,
             'tiles': tiles,
@@ -90,7 +89,7 @@ class Game(BaseGame):
         init_message = self.construct_init_message(map_index)
 
         for player in self.players.values():
-            message['player_tag'] = player.id
+            init_message['player_tag'] = player.id
             network_component = player.get_component(CUDPNetworkPlayer.component_id)
             network_component.send_message(init_message)
 
@@ -112,8 +111,7 @@ class Game(BaseGame):
 
             if len(self.players) == NUM_WAIT_PLAYERS:
                 self.send_map_init_message(self.current_map)
-        if message['action'] == 'change_map':
-
+        elif message['action'] == 'change_map':
             if message['player_id'] != self.light_player:
                 print 'NON-LIGHT PLAYER TRIED TO CHANGE MAP'
                 return
