@@ -214,7 +214,8 @@ function Scene:update(dt)
 					end
 				end
 			else
-				body:setLinearVelocity(0,0)
+				local vx,vy = body:getLinearVelocity()
+				body:setLinearVelocity(vx * (1-dt*10), vy * (1-dt*10))
 				if (unit.x - self.player.x)^2 + (unit.y - self.player.y) ^ 2 < 64*64 then
 					self.interacting = unit
 				end
