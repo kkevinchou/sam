@@ -7,7 +7,7 @@ from map_parser import MapParser
 
 from lib.ecs.component.cudpnetworkplayer import CUDPNetworkPlayer
 
-NUM_WAIT_PLAYERS = 1
+NUM_WAIT_PLAYERS = 2
 
 class Game(BaseGame):
     maps = [
