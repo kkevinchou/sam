@@ -50,7 +50,7 @@ end
 function love.load()
 	load()
     --tween.start(5, s.shadow, {x = 300})--, easing, callback, ...)
-    rcvCallback(demoInit)
+    --rcvCallback(demoInit)
     --rcvCallback([[{"direction":[1,0],"action":"move"}]])
 end
 
@@ -78,4 +78,9 @@ function love.keypressed( k )
     elseif k=='z' then
         s:sendCommand({action='change_map',direction='previous'})
     end
+
+    if k == 'b' then
+        s.bloom = .5
+                    tween.start(.5, s, {bloom = 0})
+                end
 end

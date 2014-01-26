@@ -14,6 +14,8 @@ local img = love.graphics.newImage'testbg.jpg'
 
 local tileImage = love.graphics.newImage'tileset.jpeg'
 
+local dot = love.graphics.newImage'dot.png'
+
 function Scene:initialize()
 	Object.initialize(self)
 	self.units = {}
@@ -61,6 +63,8 @@ function Scene:initialize()
 	love.graphics.clear()
 	love.graphics.setCanvas()
 	love.graphics.setBackgroundColor(0,0,0)
+
+	self.scarf = {}
 end
 
 function Scene:reset()
@@ -84,6 +88,14 @@ function Scene:getCurrentCanvas()
 	return self.lightCanvas1
 end
 
+function Scene:drawScarf()
+	for _,v in ipairs(self.scarf) do
+		local x,y = v.body:getPosition()
+		local r = v.body:getAngle()
+		love.graphics.draw(dot, x, y, r, 20, 10, .5, .5)
+	end
+end
+
 function Scene:update(dt)
 	for i,v in ipairs(self.units) do
 		if not self.bodies[v.tag] then
@@ -98,11 +110,24 @@ function Scene:update(dt)
 			self.bodies[v.tag] = b
 			b:setInertia(1000000)
 			f:setUserData(v)
+
+			if #self.scarf == 0 and self.light then
+				assert(self.light)
+				for i = 1, 8 do
+					local x,y = self.light.x, self.light.y
+					local shape = lp.newRectangleShape(20,10)
+					local b = lp.newBody(self.world, x + 20 * i)
+					local fixture = lp.newFixture(b,shape)
+				end
+			end
 		end
 
 		self.bodies[v.tag]:setPosition(v.x,v.y)
 		if v.kind == 'dark_player' then
 			self.shadow = v
+		end
+		if v.kind == 'light_player' then
+			self.light = v
 		end
 		if v.tag == self.playerTag then
 			self.player = v
@@ -131,7 +156,7 @@ function Scene:update(dt)
 			local body = self.bodies[unit.tag]
 			body:setAngle(0)
 			if unit == self.player then
-				body:setLinearVelocity(direction[1]*150,direction[2]*150)
+				body:setLinearVelocity(direction[1]*100,direction[2]*100)
 
 				for _,lightsource in ipairs(self.lightSources) do
 					if lightsource.is_on and (unit.x - lightsource.x)^2 + (unit.y - lightsource.y) ^ 2 < 64*64 then
@@ -169,7 +194,6 @@ function Scene:draw()
 	end
 	love.graphics.setColor(255,255,255,255)
 	for i,v in ipairs(self.units) do
-		--v:draw()
 		love.graphics.rectangle('line', v.x - v.w/2,
 				v.y - v.h / 2,
 				v.w,
@@ -185,11 +209,21 @@ function Scene:draw()
 
 		end
 	end
+	if self.bloom and self.bloom > 0 then
+		love.graphics.setCanvas(self:getCurrentCanvas())
+		love.graphics.clear()
+		love.graphics.setShader(self.blurShader)
+		love.graphics.draw(self.tileset)
+		love.graphics.setCanvas()
+		love.graphics.setColor(255,255,255,self.bloom*255)
+		love.graphics.draw(self:getCurrentCanvas())
+		self:exchangeCanvas()
+	end
 end
 
 function Scene:drawShadow()
 	if not self.shadow then return end
-	love.graphics.setColor(0,0,0)
+	love.graphics.setColor(255,255,255)
 	love.graphics.setShader(self.intensityShader)
 	love.graphics.draw(self.canvas1)
 	love.graphics.setShader()
@@ -249,9 +283,9 @@ function Scene:drawLight()
 				end
 				end
 			love.graphics.setCanvas()
-			love.graphics.setColor(255,255,255,100)
+			love.graphics.setColor(255,255,255,255)
 			love.graphics.setBlendMode'additive'
-			love.graphics.setShader(self.intensityShader)
+			love.graphics.setShader(self.blurShader)
 			love.graphics.draw(self.lightCanvas1)
 			love.graphics.setBlendMode'alpha'
 			love.graphics.setShader()
@@ -267,7 +301,6 @@ function Scene:drawLight()
 				if unit == self.player then
 					if self.player.kind == 'light_player' and self.player.hitByLight or 
 						self.player.kind == 'dark_player' and not self.player.hitByLight then
-						
 						self:sendCommand({action='move',x=x,y=y,tag = unit.tag})
 					end
 				else
@@ -297,9 +330,8 @@ function Scene:updateShadow( dt )
 	love.graphics.setShader(self.diffuseShader)
 	love.graphics.draw(self.vField)
 	love.graphics.setShader()
-	--if self.shadow.hitByLight then
-		love.graphics.draw(vfieldpic,self.shadow.x,self.shadow.y,self.shadowTime,1,1,16,16)
-	--end
+	love.graphics.draw(vfieldpic,self.shadow.x,self.shadow.y,self.shadowTime,1,1,16,16)
+	love.graphics.draw(vfieldpic,self.light.x,self.light.y,-self.shadowTime,1,1,16,16)
 	love.graphics.setCanvas()
 	self:exchangeVField()
 
@@ -310,8 +342,13 @@ function Scene:updateShadow( dt )
 	love.graphics.draw(self.canvas1)
 	love.graphics.setShader()
 	local x,y = self.shadow.x, self.shadow.y
-	love.graphics.setColor(255,255,255,255)
-	love.graphics.circle('fill',x,y, 16)	
+	love.graphics.setColor(255,0,0,255)
+	love.graphics.circle('fill',x,y, 16)
+
+	local x,y = self.light.x, self.light.y
+	love.graphics.setColor(255,241,195,255)
+	love.graphics.circle('fill',x,y, 16)
+
 	love.graphics.setCanvas()
 	self:exchangeCanvas()
 
@@ -324,6 +361,7 @@ function Scene:updateShadow( dt )
 	love.graphics.setShader()
 	self:exchangeCanvas()
 	love.graphics.setCanvas()
+
 end
 
 local function getTileTopLeft(tileId)
@@ -367,7 +405,7 @@ end
 
 function Scene:createObject( def )
 	if def.kind == 'light' then
-		local x,y = def.x, def.y
+		local x,y = def.x - 16, def.y - 16
 		local range = def.range or 32*2.8
 		table.insert(self.lightSources, {x=x,y=y,range=range,is_on = def.is_on,group = def.group})
 	else
@@ -383,14 +421,14 @@ function Scene:createObject( def )
 			tag = def.tag or 1,
 			quad = quad,
 			kind = def.kind,
-			x = def.x,
-			y = def.y,
+			x = def.x - 16,
+			y = def.y - 16,
 			w = def.w or 25,
 			h = def.h or 25,
 			group = def.group
 		}
 		if (def.kind=='light_player') then
-			object.quad = love.graphics.newQuad(0, 0, 32, 32, sw,sh)
+			--object.quad = love.graphics.newQuad(0, 0, 32, 32, sw,sh)
 		end
 		table.insert(self.units,object)
 	end
@@ -423,11 +461,14 @@ function Scene:updateState(data)
 			end
 		end
 	elseif data.action == 'interact' then
-		print (data,data.group)
 		for _,lightsource in ipairs(self.lightSources) do
 			print (lightsource.group)
 			if lightsource.group == data.group then
 				lightsource.is_on = not lightsource.is_on
+				if lightsource.is_on then
+					self.bloom = .5
+					tween.start(.5, self, {bloom = 0})
+				end
 			end
 		end
 	end
