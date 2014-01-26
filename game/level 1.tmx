@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="25" height="20" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="grid" tilewidth="32" tileheight="32">
+  <image source="tileset.jpeg" width="256" height="256"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="light"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="type" value="dark"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="type" value="dim_lamp"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="type" value="switch"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="type" value="devil"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="type" value="angel"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="type" value="wall"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="type" value="lit_lamp"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="type" value="box"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="type" value="window"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="type" value="mirror"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="type" value="mirror"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="25" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzjY2Bg4BvFo5iOmJMAZkFiU2IHExJmRMLI4qN2YI8DRhzilNjBiANT0x/E2iFKQzvYqBQfyPkAF6ZGfhzFwwcDAOJXF84=
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="25" height="20">
+  <object name="switch A" type="switch" x="491" y="212" width="35" height="31">
+   <properties>
+    <property name="group" value="A"/>
+    <property name="is_on" value="true"/>
+   </properties>
+  </object>
+  <object type="lightsource" x="384" y="392" width="39" height="38">
+   <properties>
+    <property name="group" value="a"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

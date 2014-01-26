@@ -1,0 +1,1367 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../luadoc.css" type="text/css" />
+	<!--meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/-->
+</head>
+
+<body>
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+<div id="main">
+
+<div id="navigation">
+
+
+<h1>LuaDoc</h1>
+<ul>
+	
+	<li><a href="../index.html">Index</a></li>
+	
+</ul>
+
+
+<!-- Module list -->
+
+<h1>Modules</h1>
+<ul>
+
+	<li><strong>lube</strong></li>
+	
+</ul>
+
+
+
+<!-- File list -->
+
+<h1>Files</h1>
+<ul>
+
+	<li>
+		<a href="../files/LUBE.html">LUBE.lua</a>
+	</li>
+
+</ul>
+
+
+
+
+
+
+</div><!-- id="navigation" -->
+
+<div id="content">
+
+<h1>Module <code>lube</code></h1>
+
+<p>LUBE</p>
+
+
+
+
+
+<h2>Functions</h2>
+<table class="function_list">
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.bin:pack">lube.bin:pack</a>&nbsp;(t)</td>
+	<td class="summary">Pack a table Does what you'd expect </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.bin:packvalue">lube.bin:packvalue</a>&nbsp;(i, v)</td>
+	<td class="summary">Pack a single value Internal, do not use </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.bin:setseperators">lube.bin:setseperators</a>&nbsp;(null, one)</td>
+	<td class="summary">Set the seperators This allows the user to nest tables, as the seperators won't conflict </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.bin:unpack">lube.bin:unpack</a>&nbsp;(s)</td>
+	<td class="summary">Unpack a string Does the opposite of pack, table -> string </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.bin:unpackvalue">lube.bin:unpackvalue</a>&nbsp;(s)</td>
+	<td class="summary">Unpack a single value Internal, do not use </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.client">lube.client</a>&nbsp;(...)</td>
+	<td class="summary">Creates a client object </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.client:Init">lube.client:Init</a>&nbsp;(socktype)</td>
+	<td class="summary">Initialize the client Automatically called when creating a connection object </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.client:connect">lube.client:connect</a>&nbsp;(host, port, dns)</td>
+	<td class="summary">Connect to a server </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.client:disableBroadcast">lube.client:disableBroadcast</a>&nbsp;()</td>
+	<td class="summary">Disable connecting to the broadcast address (warning: has direct effect, old connection terminated unclean) </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.client:disconnect">lube.client:disconnect</a>&nbsp;()</td>
+	<td class="summary">Disconnect from the server </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.client:doPing">lube.client:doPing</a>&nbsp;(dt)</td>
+	<td class="summary">Do a ping (according to settings) Does a ping whenever needed </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.client:enableBroadcast">lube.client:enableBroadcast</a>&nbsp;()</td>
+	<td class="summary">Enable connecting to the broadcast address </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.client:receive">lube.client:receive</a>&nbsp;()</td>
+	<td class="summary">Receive data from the server </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.client:send">lube.client:send</a>&nbsp;(data)</td>
+	<td class="summary">Send data to the server </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.client:setCallback">lube.client:setCallback</a>&nbsp;(cb)</td>
+	<td class="summary">Set callback </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.client:setHandshake">lube.client:setHandshake</a>&nbsp;(hshake)</td>
+	<td class="summary">Set handshake Handshake is a string to identify the opening and closing of the connection </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.client:setPing">lube.client:setPing</a>&nbsp;(enabled, time, msg)</td>
+	<td class="summary">Set ping Set the options for the ping </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.client:update">lube.client:update</a>&nbsp;(dt)</td>
+	<td class="summary">Search for new messages and call the appropriate callback Also does ping, since 0.6 </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.easy.generateKey">lube.easy.generateKey</a>&nbsp;(keylength)</td>
+	<td class="summary">Internal: Generate a key for 'secured' connections </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.easy:client">lube.easy:client</a>&nbsp;(host, port, table, serializer, deserializer, rate, object)</td>
+	<td class="summary">Start a client </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.easy:gettable">lube.easy:gettable</a>&nbsp;()</td>
+	<td class="summary">Internal: Get the converted table </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.easy:server">lube.easy:server</a>&nbsp;(port, table, serializer, deserializer, rate, object, keylength)</td>
+	<td class="summary">Start a server </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.easy:settable">lube.easy:settable</a>&nbsp;(data)</td>
+	<td class="summary">Internal: Set the converted table </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.easy:update">lube.easy:update</a>&nbsp;(dt)</td>
+	<td class="summary">Update (runs a synchronization cycle when necessary) </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.server">lube.server</a>&nbsp;(...)</td>
+	<td class="summary">Creates a server object </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.server.tcp:acceptAll">lube.server.tcp:acceptAll</a>&nbsp;()</td>
+	<td class="summary">Accepts connecting clients (TCP only) </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.server:Init">lube.server:Init</a>&nbsp;(port, socktype)</td>
+	<td class="summary">Initializes the server </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.server:checkPing">lube.server:checkPing</a>&nbsp;(dt)</td>
+	<td class="summary">Check for ping messages If clients are timed out, disconnect them </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.server:receive">lube.server:receive</a>&nbsp;()</td>
+	<td class="summary">Receive data from clients </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.server:respondToServBrowser">lube.server:respondToServBrowser</a>&nbsp;(active, info)</td>
+	<td class="summary">Sets if the server should respond to Server Browser requests </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.server:send">lube.server:send</a>&nbsp;(data, rcpt)</td>
+	<td class="summary">Send data to clients </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.server:setCallback">lube.server:setCallback</a>&nbsp;(recv, connect, disconnect)</td>
+	<td class="summary">Sets the callbacks </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.server:setHandshake">lube.server:setHandshake</a>&nbsp;(hshake)</td>
+	<td class="summary">Sets a handshake </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.server:setPing">lube.server:setPing</a>&nbsp;(enabled, time, msg)</td>
+	<td class="summary">Set ping </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.server:startserver">lube.server:startserver</a>&nbsp;(port)</td>
+	<td class="summary">Start the server Sets the server, is normally called by init </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lube.server:update">lube.server:update</a>&nbsp;(dt)</td>
+	<td class="summary">Update the server Checks for incoming messages, and classifies as ping, connect, disconnect and raw data Also checks ping (since 0.6) </td>
+	</tr>
+
+</table>
+
+
+
+
+
+
+<br/>
+<br/>
+
+
+
+<h2><a name="functions"></a>Functions</h2>
+<dl class="function">
+
+
+
+<dt><a name="lube.bin:pack"></a><strong>lube.bin:pack</strong>&nbsp;(t)</dt>
+<dd>
+Pack a table Does what you'd expect
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  t: Table to pack
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.bin:packvalue"></a><strong>lube.bin:packvalue</strong>&nbsp;(i, v)</dt>
+<dd>
+Pack a single value Internal, do not use
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  i: 
+	</li>
+	
+	<li>
+	  v: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="">
+		lube.bin:pack
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="lube.bin:setseperators"></a><strong>lube.bin:setseperators</strong>&nbsp;(null, one)</dt>
+<dd>
+Set the seperators This allows the user to nest tables, as the seperators won't conflict
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  null: The first seperator character, if empty set to default
+	</li>
+	
+	<li>
+	  one: The second seperator character, if empty set to default
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.bin:unpack"></a><strong>lube.bin:unpack</strong>&nbsp;(s)</dt>
+<dd>
+Unpack a string Does the opposite of pack, table -> string
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  s: The string, which is generally a result of lub.bin:pack
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.bin:unpackvalue"></a><strong>lube.bin:unpackvalue</strong>&nbsp;(s)</dt>
+<dd>
+Unpack a single value Internal, do not use
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  s: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="">
+		lube.bin:unpack
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="lube.client"></a><strong>lube.client</strong>&nbsp;(...)</dt>
+<dd>
+Creates a client object
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  ...: What to pass to Init
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="">
+		lube.client:Init
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="lube.client:Init"></a><strong>lube.client:Init</strong>&nbsp;(socktype)</dt>
+<dd>
+Initialize the client Automatically called when creating a connection object
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  socktype: Type of socket, tcp/udp/user-created, udp is default
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.client:connect"></a><strong>lube.client:connect</strong>&nbsp;(host, port, dns)</dt>
+<dd>
+Connect to a server
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  host: 
+	</li>
+	
+	<li>
+	  port: 
+	</li>
+	
+	<li>
+	  dns: Specify if the host is a name or an IP, if it's a hostname it should do a DNS lookup
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.client:disableBroadcast"></a><strong>lube.client:disableBroadcast</strong>&nbsp;()</dt>
+<dd>
+Disable connecting to the broadcast address (warning: has direct effect, old connection terminated unclean)
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.client:disconnect"></a><strong>lube.client:disconnect</strong>&nbsp;()</dt>
+<dd>
+Disconnect from the server
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.client:doPing"></a><strong>lube.client:doPing</strong>&nbsp;(dt)</dt>
+<dd>
+Do a ping (according to settings) Does a ping whenever needed
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  dt: Delta time, as passed to update
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="">
+		lube.client:setPing
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="lube.client:enableBroadcast"></a><strong>lube.client:enableBroadcast</strong>&nbsp;()</dt>
+<dd>
+Enable connecting to the broadcast address
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.client:receive"></a><strong>lube.client:receive</strong>&nbsp;()</dt>
+<dd>
+Receive data from the server
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.client:send"></a><strong>lube.client:send</strong>&nbsp;(data)</dt>
+<dd>
+Send data to the server
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  data: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.client:setCallback"></a><strong>lube.client:setCallback</strong>&nbsp;(cb)</dt>
+<dd>
+Set callback
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  cb: A callback called on an incoming message
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="">
+		lube.server:setCallback
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="lube.client:setHandshake"></a><strong>lube.client:setHandshake</strong>&nbsp;(hshake)</dt>
+<dd>
+Set handshake Handshake is a string to identify the opening and closing of the connection
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  hshake: A handshake, shared by server and client
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.client:setPing"></a><strong>lube.client:setPing</strong>&nbsp;(enabled, time, msg)</dt>
+<dd>
+Set ping Set the options for the ping
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  enabled: Is enabled (true/false)
+	</li>
+	
+	<li>
+	  time: How many seconds between pings?
+	</li>
+	
+	<li>
+	  msg: What is the ping package content (should be same between server and client, filtered)
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="">
+		lube.client:doPing
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="lube.client:update"></a><strong>lube.client:update</strong>&nbsp;(dt)</dt>
+<dd>
+Search for new messages and call the appropriate callback Also does ping, since 0.6
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  dt: Delta-time, since 0.6
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="">
+		lube.client:setCallback
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="lube.easy.generateKey"></a><strong>lube.easy.generateKey</strong>&nbsp;(keylength)</dt>
+<dd>
+Internal: Generate a key for 'secured' connections
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  keylength: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.easy:client"></a><strong>lube.easy:client</strong>&nbsp;(host, port, table, serializer, deserializer, rate, object)</dt>
+<dd>
+Start a client
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  host: 
+	</li>
+	
+	<li>
+	  port: 
+	</li>
+	
+	<li>
+	  table: 
+	</li>
+	
+	<li>
+	  serializer: 
+	</li>
+	
+	<li>
+	  deserializer: 
+	</li>
+	
+	<li>
+	  rate: 
+	</li>
+	
+	<li>
+	  object: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="">
+		lube.easy:server
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="lube.easy:gettable"></a><strong>lube.easy:gettable</strong>&nbsp;()</dt>
+<dd>
+Internal: Get the converted table
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.easy:server"></a><strong>lube.easy:server</strong>&nbsp;(port, table, serializer, deserializer, rate, object, keylength)</dt>
+<dd>
+Start a server
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  port: 
+	</li>
+	
+	<li>
+	  table: Table to be synchronized
+	</li>
+	
+	<li>
+	  serializer: Serializer used to turn the table into strings
+	</li>
+	
+	<li>
+	  deserializer: Deserializer used to turn strings into tables
+	</li>
+	
+	<li>
+	  rate: Speed at which it's synchronized
+	</li>
+	
+	<li>
+	  object: Connection object
+	</li>
+	
+	<li>
+	  keylength: Optional: Length of the key
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.easy:settable"></a><strong>lube.easy:settable</strong>&nbsp;(data)</dt>
+<dd>
+Internal: Set the converted table
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  data: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.easy:update"></a><strong>lube.easy:update</strong>&nbsp;(dt)</dt>
+<dd>
+Update (runs a synchronization cycle when necessary)
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  dt: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.server"></a><strong>lube.server</strong>&nbsp;(...)</dt>
+<dd>
+Creates a server object
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  ...: What to pass to Init
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="">
+		lube.server:Init
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="lube.server.tcp:acceptAll"></a><strong>lube.server.tcp:acceptAll</strong>&nbsp;()</dt>
+<dd>
+Accepts connecting clients (TCP only)
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.server:Init"></a><strong>lube.server:Init</strong>&nbsp;(port, socktype)</dt>
+<dd>
+Initializes the server
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  port: Which port to listen on
+	</li>
+	
+	<li>
+	  socktype: Type of socket, can be udp/tcp/user-created, default is udp
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.server:checkPing"></a><strong>lube.server:checkPing</strong>&nbsp;(dt)</dt>
+<dd>
+Check for ping messages If clients are timed out, disconnect them
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  dt: Delta-time as passed to update
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.server:receive"></a><strong>lube.server:receive</strong>&nbsp;()</dt>
+<dd>
+Receive data from clients
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.server:respondToServBrowser"></a><strong>lube.server:respondToServBrowser</strong>&nbsp;(active, info)</dt>
+<dd>
+Sets if the server should respond to Server Browser requests
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  active: Should the server respond
+	</li>
+	
+	<li>
+	  info: A table containing the server name and version as named keys
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.server:send"></a><strong>lube.server:send</strong>&nbsp;(data, rcpt)</dt>
+<dd>
+Send data to clients
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  data: 
+	</li>
+	
+	<li>
+	  rcpt: Recipient, if nil then sends to all clients
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.server:setCallback"></a><strong>lube.server:setCallback</strong>&nbsp;(recv, connect, disconnect)</dt>
+<dd>
+Sets the callbacks
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  recv: Callback called on incoming data (filtered): function(data, id)
+	</li>
+	
+	<li>
+	  connect: Callback called when client connects: function(id)
+	</li>
+	
+	<li>
+	  disconnect: Callback called when client disconnects (also called by ping): function(id)
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lube.server:setHandshake"></a><strong>lube.server:setHandshake</strong>&nbsp;(hshake)</dt>
+<dd>
+Sets a handshake
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  hshake: A unqiue string, shared by client and server to identify connecting and disconnecting users
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="">
+		lube.client:setHandshake
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="lube.server:setPing"></a><strong>lube.server:setPing</strong>&nbsp;(enabled, time, msg)</dt>
+<dd>
+Set ping
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  enabled: 
+	</li>
+	
+	<li>
+	  time: 
+	</li>
+	
+	<li>
+	  msg: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="">
+		lube.client:setPing
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="lube.server:startserver"></a><strong>lube.server:startserver</strong>&nbsp;(port)</dt>
+<dd>
+Start the server Sets the server, is normally called by init
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  port: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="">
+		lube.server:Init
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="lube.server:update"></a><strong>lube.server:update</strong>&nbsp;(dt)</dt>
+<dd>
+Update the server Checks for incoming messages, and classifies as ping, connect, disconnect and raw data Also checks ping (since 0.6)
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  dt: Delta-time
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+</dl>
+
+
+
+
+
+
+</div> <!-- id="content" -->
+
+</div> <!-- id="main" -->
+
+<div id="about">
+	<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
+</div> <!-- id="about" -->
+
+</div> <!-- id="container" -->	
+</body>
+</html>
