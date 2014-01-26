@@ -101,7 +101,9 @@ function Scene:update(dt)
 	for i,v in ipairs(self.units) do
 		if not self.bodies[v.tag] then
 			local kind = 'static'
-			if v.kind == 'light_player' or v.kind == 'dark_player' then
+			if (v.kind ~= 'wall') then print (v.kind) end
+			if v.kind == 'light_player' or v.kind == 'dark_player' or v.kind == 'box' then
+				print (v.kind, 'is dynamic')
 				kind = 'dynamic'
 			end
 			local b = lp.newBody(self.world,v.x,v.y,kind)
@@ -165,8 +167,10 @@ function Scene:update(dt)
 				body:setLinearVelocity(vx * speed,vy * speed)
 
 				for _,lightsource in ipairs(self.lightSources) do
-					if lightsource.is_on and (unit.x - lightsource.x)^2 + (unit.y - lightsource.y) ^ 2 < 64*64 then
-						unit.hitByLight = true
+					if self.player == self.light then
+						if lightsource.is_on and (unit.x - lightsource.x)^2 + (unit.y - lightsource.y) ^ 2 < 64*64 then
+							unit.hitByLight = true
+						end
 					end
 				end
 			else
@@ -267,9 +271,10 @@ function Scene:drawLight()
 				    hit.xn, hit.yn = xn, yn
 				    hit.fraction = fraction
 				    hit.data = data
-				    if data.kind == 'light_player' or data.kind == 'dark_player' then
+				    if data.kind == 'light_player' then
 				  		data.hitByLight = true
-				  	elseif data.kind == 'wall' then
+				  	end
+				  	if data.kind == 'wall' or data.kind == 'box' or data.kind == 'dark_player' then
 				    	table.insert(hitList, hit)
 				    end
 
@@ -410,9 +415,10 @@ function Scene:createTile(data,width,height)
 end
 
 function Scene:createObject( def )
-	if def.kind == 'light' then
+	if def.kind == 'light' or def.kind == 'window_light' then
 		local x,y = def.x - 16, def.y - 16
-		local range = def.range or 32*2.8
+		local range = def.range or 2.8
+		range = range * 32
 		table.insert(self.lightSources, {x=x,y=y,range=range,is_on = def.is_on,group = def.group})
 	else
 		local sw,sh = tileImage:getWidth(), tileImage:getHeight()
@@ -423,6 +429,9 @@ function Scene:createObject( def )
 			quad = love.graphics.newQuad(tx * 32,ty *32, 32, 32, sw,sh)
 		end
 		print (def.kind)
+		if (def.kind == 'box') then
+			def.w, def.h = 35,35
+		end
 		local object = {
 			tag = def.tag or 1,
 			quad = quad,
