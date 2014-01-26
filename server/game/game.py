@@ -67,11 +67,12 @@ class Game(BaseGame):
                 processed_object['tag'] = next_obj_id
                 next_obj_id += 1
 
-            for k, v in processed_object.iteritems():
-                if v == 'false':
-                    processed_objects[k] = False
-                elif v == 'true':
-                    processed_objects[k] = True
+            if 'properties' in obj:
+                for k, v in obj['properties'].iteritems():
+                    if v == 'false':
+                        obj['properties'][k] = False
+                    elif v == 'true':
+                        obj['properties'][k] = True
 
             processed_object.update(obj['properties'])
             processed_objects.append(processed_object)
