@@ -14,6 +14,10 @@ class Game(BaseGame):
         os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level1c.json'),
         os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level2c.json'),
         os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level3c.json'),
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level4c.json'),
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level5c.json'),
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level6c.json'),
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level7c.json'),
     ]
 
     def __init__(self, fps):
