@@ -11,7 +11,7 @@ NUM_WAIT_PLAYERS = 2
 
 class Game(BaseGame):
     maps = [
-        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'sample.json'),
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'maps', 'level1c.json'),
     ]
 
     def __init__(self, fps):
@@ -48,19 +48,33 @@ class Game(BaseGame):
             self.handle_message(message)
             message = self._safe_get_in_message()
 
-    def construct_init_message(self, player_id):
-        width, height, tiles, objects = self.map_parser.parse(self.maps[self.current_map])
-
+    def process_objects(self, objects):
         next_obj_id = 1000
 
+        processed_objects = []
         for obj in objects:
-            if obj['kind'] == 'light_player':
-                obj['tag'] = self.light_player
-            elif obj['kind'] == 'dark_player':
-                obj['tag'] = self.dark_player
+            processed_object = {
+                'kind': obj['type'],
+                'x': obj['x'] + int(obj['width'] / 2),
+                'y': obj['y'] + int(obj['height'] / 2),
+            }
+
+            if processed_object['kind'] == 'light_player':
+                processed_object['tag'] = self.light_player
+            elif processed_object['kind'] == 'dark_player':
+                processed_object['tag'] = self.dark_player
             else:
-                obj['tag'] = next_obj_id
+                processed_object['tag'] = next_obj_id
                 next_obj_id += 1
+
+            processed_object.update(obj['properties'])
+            processed_objects.append(processed_object)
+
+        return processed_objects
+
+    def construct_init_message(self, player_id):
+        width, height, tiles, objects = self.map_parser.parse(self.maps[self.current_map])
+        objects = self.process_objects(objects)
 
         message = {
             'action': 'init',

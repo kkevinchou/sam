@@ -28,16 +28,6 @@ class MapParser(object):
         tiles = map_data['layers'][0]['data']
         objects = map_data['layers'][1]['objects']
 
-        processed_objects = []
-        for obj in objects:
-            processed_object = {
-                'kind': obj['type'],
-            }
-            processed_object.update(obj['properties'])
-            processed_objects.append(processed_object)
-
-        print processed_objects
-
         # for k, v in object_defs.iteritems():
         #     object_defs[int(k) + 1] = object_defs.pop(k)
 
@@ -45,7 +35,7 @@ class MapParser(object):
         #     for y in range(height):
         #         grid[x][y] = object_defs[grid[x][y]]
 
-        return width, height, tiles, processed_objects
+        return width, height, tiles, objects
 
 if __name__ == "__main__":
     MapParser().parse('maps/sample.json')
