@@ -8,6 +8,7 @@ switchOn = love.audio.newSource("sounds/effects/switch/switch_on.ogg", "static")
 switchOff = love.audio.newSource("sounds/effects/switch/switch_off.ogg", "static")
 bgMusic = love.audio.newSource("sounds/music/Timeless_Jami_Sieber_03_River_of_Sky_Jami_Sieber_spoken.ogg", "stream")
 bgMusic:setLooping(true)
+bgMusic:setVolume(0.6)
 
 sounds.playAngel = function(self,isOn)
     print ('playerAngel',isOn)
