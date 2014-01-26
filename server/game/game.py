@@ -25,10 +25,6 @@ class Game(BaseGame):
 
     def on_message(self, message):
         message['timestamp'] = time.time()
-
-        if 'player_id' in message:
-            print '[Player {}] Received message: {}'.format(message['player_id'], message)
-
         self.in_messages.put(message)
 
     def _safe_get_in_message(self):

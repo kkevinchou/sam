@@ -30,7 +30,6 @@ class SocketHandler(SocketServer.BaseRequestHandler):
         next_player_id = self.server.next_player_id
         game = self.server.game
 
-        print next_player_id
         if self.client_address not in clients:
             clients[self.client_address] = next_player_id
             self.server.next_player_id += 1
@@ -38,7 +37,6 @@ class SocketHandler(SocketServer.BaseRequestHandler):
         player_id = clients[self.client_address]
 
         data = self.request[0].strip()
-        print ' *** Received {}'.format(data)
         message = json.loads(data)
         message['player_id'] = player_id
 
