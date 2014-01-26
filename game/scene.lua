@@ -422,23 +422,34 @@ function Scene:drawLight()
 			end
 
 		    if unit.kind == 'devil' then
+		    	if unit.prevHit ~= unit.hitByLight then
+			    	if unit.hitByLight then
+	    				audio:playDevil(false)
+					else
+	    				audio:playDevil(true)
+					end
+				end
+		    	unit.prevHit = unit.hitByLight
 		    	if unit.hitByLight then
-
 					unit.animation.images = devilImage
-    				audio:playDevil(false)
 				else
 					unit.animation.images = devilImage2
-    				audio:playDevil(true)
 				end
 		    end
 		    if unit.kind == 'angel' then
+		    	if unit.prevHit ~= unit.hitByLight then
+			    	if unit.hitByLight then
+	    				audio:playAngel(true)
+					else
+	    				audio:playAngel(false)
+					end
+				end
+		    	unit.prevHit = unit.hitByLight
 		    	if unit.hitByLight then
 
 					unit.animation.images = angelImage2
-    				audio:playAngel(true)
 				else
 					unit.animation.images = angelImage
-    				audio:playAngel(false)
 				end
 		    end
 

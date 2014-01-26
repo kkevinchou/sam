@@ -9,7 +9,8 @@ switchOff = love.audio.newSource("sounds/effects/switch/switch_off.ogg", "static
 bgMusic = love.audio.newSource("sounds/music/Timeless_Jami_Sieber_03_River_of_Sky_Jami_Sieber_spoken.ogg", "stream")
 bgMusic:setLooping(true)
 
-sounds.playAngel = function(isOn)
+sounds.playAngel = function(self,isOn)
+    print ('playerAngel',isOn)
     if isOn then
         angelOn:play()
     else
@@ -17,7 +18,8 @@ sounds.playAngel = function(isOn)
     end
 end
 
-sounds.playDevil = function(isOn)
+sounds.playDevil = function(self,isOn)
+    print ('playerDevil',isOn)
     if isOn then
         devilOn:play()
     else
@@ -25,7 +27,7 @@ sounds.playDevil = function(isOn)
     end
 end
 
-sounds.playSwitch = function(isOn)
+sounds.playSwitch = function(self,isOn)
     if isOn then
         switchOn:play()
     else
@@ -33,7 +35,7 @@ sounds.playSwitch = function(isOn)
     end
 end
 
-sounds.playMusic = function(isOn)
+sounds.playMusic = function(self,isOn)
     if isOn then
         bgMusic:play()
     else
