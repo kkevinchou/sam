@@ -7,7 +7,7 @@ from map_parser import MapParser
 
 from lib.ecs.component.cudpnetworkplayer import CUDPNetworkPlayer
 
-NUM_WAIT_PLAYERS = 2
+NUM_WAIT_PLAYERS = 1
 
 class Game(BaseGame):
     maps = [
@@ -72,8 +72,8 @@ class Game(BaseGame):
 
         return processed_objects
 
-    def construct_init_message(self, player_id):
-        width, height, tiles, objects = self.map_parser.parse(self.maps[self.current_map])
+    def construct_init_message(self, map_index):
+        width, height, tiles, objects = self.map_parser.parse(self.maps[map_index])
         objects = self.process_objects(objects)
 
         message = {
@@ -86,10 +86,13 @@ class Game(BaseGame):
         }
         return message
 
-    def send_map_init_message(self):
+    def send_map_init_message(self, map_index):
+        init_message = self.construct_init_message(map_index)
+
         for player in self.players.values():
+            message['player_tag'] = player.id
             network_component = player.get_component(CUDPNetworkPlayer.component_id)
-            network_component.send_message(self.construct_init_message(player.id))
+            network_component.send_message(init_message)
 
     def handle_message(self, message):
         if message['action'] == 'player_connect':
@@ -108,7 +111,27 @@ class Game(BaseGame):
                 self.dark_player = player.id
 
             if len(self.players) == NUM_WAIT_PLAYERS:
-                self.send_map_init_message()
+                self.send_map_init_message(self.current_map)
+        if message['action'] == 'change_map':
+
+            if message['player_id'] != self.light_player:
+                print 'NON-LIGHT PLAYER TRIED TO CHANGE MAP'
+                return
+
+            direction = message['direction']:
+            index = message.get('index', None)
+
+            if direction == 'next':
+                self.current_map += 1
+                self.current_map = min(self.current_map, len(self.maps) - 1)
+            elif direction == 'previous':
+                self.current_map -= 1
+                self.current_map = max(self.current_map, 0)
+
+            if index is not None and index > -1 and index < len(self.maps):
+                self.current_map = index
+
+            self.send_map_init_message(sefl.current_map)
         else:
             for player in self.players.values():
                 network_component = player.get_component(CUDPNetworkPlayer.component_id)
