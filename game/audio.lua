@@ -6,6 +6,7 @@ devilOn = love.audio.newSource("sounds/effects/statues/devil/devil_on.ogg", "sta
 devilOff = love.audio.newSource("sounds/effects/statues/devil/devil_off.ogg", "static")
 switchOn = love.audio.newSource("sounds/effects/switch/switch_on.ogg", "static")
 switchOff = love.audio.newSource("sounds/effects/switch/switch_off.ogg", "static")
+winning = love.audio.newSource("winning.ogg", "static")
 bgMusic = love.audio.newSource("sounds/music/River_of_Sky_WIthout_Ending.ogg", "stream")
 bgMusic:setLooping(true)
 bgMusic:setVolume(0.6)
@@ -42,6 +43,10 @@ sounds.playMusic = function(self,isOn)
     else
         bgMusic:stop()
     end
+end
+
+sounds.playWin  = function(self)
+    winning:play()
 end
 
 return sounds
